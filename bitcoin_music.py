@@ -17,15 +17,21 @@ for i in range(10):
     elems = soup.select("#btc_jpy_top_bid")
     for elem in elems:
         data.append(elem.getText())
-        #print(elem.getText())
-    data[i] = data[i].replace(",","")
-    data[i] = float(data[i])
-    data[i] = round(data[i])
-    rhythm = data[i] - data[i-1]
     
+    #余分な配列の削除
+    if len(data) > 2:
+        data.pop(0)
+    #取得した文字列の処理
+    data[-1] = data[-1].replace(",","")
+    data[-1] = float(data[-1])
+    data[-1] = round(data[-1])
+    rhythm = data[0] - data[-1]
+    
+    #音声処理
     t = np.linspace(0, np.pi*2*(500+rhythm/10), 44100)
     y = np.sin(t)
+    
+    #出力
     IPython.display.display(IPython.display.Audio(data=y, rate=44100))
-    #print(data)
     print(rhythm)
     sleep(3)
