@@ -13,7 +13,7 @@ for i in range(10):
     res.raise_for_status()
     soup = BeautifulSoup(res.text,"html.parser")
 
-
+    #ビットコインの価格抽出
     elems = soup.select("#btc_jpy_top_bid")
     for elem in elems:
         data.append(elem.getText())
