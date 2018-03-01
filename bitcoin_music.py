@@ -8,6 +8,7 @@ data = []
 
 url = "https://cc.minkabu.jp/pair/BTC_JPY"
 
+#とりあえず10回まわしとく
 for i in range(10):
     res = requests.get(url)
     res.raise_for_status()
