@@ -1,20 +1,31 @@
+#!/usr/bin/env python
+#-*- cording: utf-8 -*-
+
 import requests
 from bs4 import BeautifulSoup
 from time import sleep
 import IPython
 import numpy as np
+import pygame.mixer
+import time
 
 data = []
 
 url = "https://cc.minkabu.jp/pair/BTC_JPY"
 
-#とりあえず10回まわしとく
+    # 音楽ファイルの読み込み
+def beepSound(doremi):
+    pygame.mixer.music.load(doremi)
+    pygame.mixer.music.play(1)
+    time.sleep(2)
+    pygame.mixer.music.stop()
+
 for i in range(10):
     res = requests.get(url)
     res.raise_for_status()
     soup = BeautifulSoup(res.text,"html.parser")
 
-    #ビットコインの価格抽出
+
     elems = soup.select("#btc_jpy_top_bid")
     for elem in elems:
         data.append(elem.getText())
@@ -28,11 +39,26 @@ for i in range(10):
     data[-1] = round(data[-1])
     rhythm = data[0] - data[-1]
     
-    #音声処理
-    t = np.linspace(0, np.pi*2*(500+rhythm/10), 44100)
-    y = np.sin(t)
+    # mixerモジュールの初期化
+    pygame.mixer.init()
     
-    #出力
-    IPython.display.display(IPython.display.Audio(data=y, rate=44100))
+    # 株価の高低差によって音階を変更
+    if rhythm <= -501:
+        beepSound("sound/do.ogg")
+    elif rhythm <= -301 and rhythm > -500:
+        beepSound("sound/re.ogg")
+    elif rhythm <= -101 and rhythm > -300:
+        beepSound("sound/mi.ogg")
+    elif rhythm <= -1 and rhythm > -100:
+        beepSound("sound/fa.ogg")
+    elif rhythm >= 0 and rhythm < 100:
+        beepSound("sound/so.ogg")
+    elif rhythm >= 101 and rhythm < 300:
+        beepSound("sound/ra.ogg")
+    elif rhythm >= 301 and rhythm < 500:
+        beepSound("sound/si.ogg")
+    elif rhythm >= 501:
+        beepSound("sound/do_h.ogg")
+    
     print(rhythm)
-    sleep(3)
+    sleep(1)
