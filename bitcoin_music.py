@@ -37,7 +37,7 @@ for i in range(10):
     data[-1] = data[-1].replace(",","")
     data[-1] = float(data[-1])
     data[-1] = round(data[-1])
-    rhythm = data[0] - data[-1]
+    rhythm = data[-1] - data[0]
     
     # mixerモジュールの初期化
     pygame.mixer.init()
@@ -60,5 +60,6 @@ for i in range(10):
     elif rhythm >= 501:
         beepSound("sound/do_h.ogg")
     
+    print("現在のビットコイン：",data[-1],"円")
     print(rhythm)
     sleep(1)
